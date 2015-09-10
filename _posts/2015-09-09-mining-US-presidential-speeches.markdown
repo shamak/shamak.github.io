@@ -12,6 +12,8 @@ n-grams are contiguous sequences of n items from a piece of text. They are parti
 
 I decided to start off by generating uni-grams over the speeches. I decided to use [NLTK](http://nltk.org/) since I've heard lots of good things about it.
 
+# Unigram Analysis #
+
 I grabbed transcripts of the announcement speeches of Barack Obama in 2007, Mitt Romney in 2012, Hillary Clinton in 2015 and Donald Trump in 2015. I ran a regular expression tokenizer to get all the words in the speech. Here are the top 30 uni-grams generated for Mitt Romney's speech.
 
 ![RomneyUnigramsNoStopWords]({{ site.url }}/images/romney_unigrams_no_stopwords.png)
@@ -36,8 +38,48 @@ Here's Donald Trump's 2015 Presidential Announcement Speech.
 
 ![TrumpUnigramsStopWords]({{ site.url }}/images/trump_unigrams_stopwords.png)
 
-What? There's no mention of America, tax, work, school, health or economy anywhere. I see 'China' as one of the top words. Did I screw up? I should probably do a quick bi-gram analysis.
+What? There's no mention of America, tax, work, school, health or economy anywhere. I see 'China' as one of the top words. I should probably do a bi-gram analysis.
 
+# Bigram Analysis #
 
+NLTK makes it really easy to generate bigrams and the frequency score using [collocations](http://www.nltk.org/howto/collocations.html).
+
+![RomneybigramsStopWords]({{ site.url }}/images/romney_bigrams_stopwords.png)
+
+Romney's speech seems to mention Obama pretty frequently. I was curious to why 'three year' was on top of the list. I searched through his speech to find this.
+
+*"Barack Obama has failed America.*
+
+*When he took office, the economy was in recession. He made it worse. And he made it last longer.*
+
+*Three years later, over 16 million Americans are out of work or have just quit looking. Millions more are underemployed.*
+
+*Three years later, unemployment is still above 8%, a figure he said his stimulus would keep from happening.*
+
+*Three years later, foreclosures are still at record levels.*
+
+*Three years later the prices of homes continue to fall.*
+
+*Three years later, our national debt has grown nearly as large as our entire economy."*
+
+That's not that helpful. Maybe there exists a way to ignore figures of speech using NLTK, just haven't figured it out yet.
+
+![ObamabigramsStopWords]({{ site.url }}/images/obama_bigrams_stopwords.png)
+
+![ClintonbigramsStopWords]({{ site.url }}/images/clinton_bigrams_stopwords.png)
+
+These graphs make more sense. I would have expected to see something like this.
+
+![TrumpUnigramsStopWords]({{ site.url }}/images/trump_bigrams_stopwords.png)
+
+This still seems to be an outlier amongst the other speeches. I'm not sure what to make of it.
+
+## Insight ##
+
+In my opinion, this was an interesting experiment. It gives a rough idea of what candidates are actually focusing on. I'm sure people who write these speeches go through a similar sort of analysis before they give it to their candidates.
+
+I was thinking if we could run these analysis tools against lecture transcripts at university, it could possibly tell us what they key concepts to focus on would be. That would be awesome.
+
+Shoot me an email if you have any additional thoughts!
 
 
