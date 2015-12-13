@@ -10,4 +10,4 @@ I enjoy analysing and solving problems using machines and machine learning. I re
 
 I am currently pursuing research as an undergraduate in deep learning of neural networks using opposition based computing at the University of Waterloo.
 
-I'm looking for an internship from January 2016 - April 2016.
+I will be interning at [A9](https://a9.com) on the [Advertising Technology](https://a9.com/whatwedo/advertising/) team starting January 2016.
