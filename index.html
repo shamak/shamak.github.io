@@ -1,50 +1,214 @@
----
-layout: default
----
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+	<meta name=viewport content=“width=800”>
+	<meta name="generator" content="HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org">
+	<style type="text/css">
+		/* Color scheme stolen from Sergey Karayev */
+		a {
+		color: #1772d0;
+		text-decoration:none;
+		}
+		a:focus, a:hover {
+		color: #f09228;
+		text-decoration:none;
+		}
+		body,td,th,tr,p,a {
+		font-family: 'Lato', Verdana, Helvetica, sans-serif;
+		font-size: 14px
+		}
+		strong {
+		font-family: 'Lato', Verdana, Helvetica, sans-serif;
+		font-size: 14px;
+		}
+		heading {
+		font-family: 'Lato', Verdana, Helvetica, sans-serif;
+		font-size: 22px;
+		}
+		papertitle {
+		font-family: 'Lato', Verdana, Helvetica, sans-serif;
+		font-size: 14px;
+		font-weight: 700
+		}
+		name {
+		font-family: 'Lato', Verdana, Helvetica, sans-serif;
+		font-size: 32px;
+		}
+		.one
+		{
+		width: 160px;
+		height: 160px;
+		position: relative;
+		}
+		.two
+		{
+		width: 160px;
+		height: 160px;
+		position: absolute;
+		transition: opacity .2s ease-in-out;
+		-moz-transition: opacity .2s ease-in-out;
+		-webkit-transition: opacity .2s ease-in-out;
+		}
+		.fade {
+		 transition: opacity .2s ease-in-out;
+		 -moz-transition: opacity .2s ease-in-out;
+		 -webkit-transition: opacity .2s ease-in-out;
+		}
+		span.highlight {
+				background-color: #ffffd0;
+		}
+	</style>
+	<link rel="icon" type="image/png" href="seal_icon.png">
+	<title>Shamak Dutta</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+	</head>
+	<body>
+	<table width="800" border="0" align="center" cellspacing="0" cellpadding="0">
+		<tr>
+		<td>
+			<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
+			<tr>
+				<td width="67%" valign="middle">
+				<p align="center">
+					<name>Shamak Dutta</name>
+				</p>
+				<p align="center">
+					s7dutta at edu dot uwaterloo dot ca
+				<p>I am a graduate student at the <a
+					href="http://uwaterloo.ca">University of Waterloo</a>, where I
+					work
+					on machine learning and its intersection with computational
+					neuroscience. I am part of the <a
+					href="https://uwaterloo.ca/neurorobotics-lab/">BRAIN Lab</a> and the
+					<a
+				href="http://www.uoguelph.ca/~gwtaylor/">Machine Learning Research
+				Group</a>, advised by <a href="https://uwaterloo.ca/systems-design-engineering/profile/bptripp">Bryan Tripp</a> and <a
+				href="http://www.uoguelph.ca/~gwtaylor/">Graham Taylor</a>.
+				</p>
+				<p>
+					Before graduate school, I received a Bachelors in ECE at the <a
+					href="http://uwaterloo.ca">University of Waterloo</a>, where I worked
+					on several research projects, including behaviour cloning for
+					human motion under <a
+					href="https://ece.uwaterloo.ca/~dkulic/people-dana.html">Dana Kulic
+					</a>, the generalized travelling salesman problem under <a
+					href="https://ece.uwaterloo.ca/~sl2smith/">Stephen Smith</a>
+					and compressed image retrieval under <a href="http://kimia.uwaterloo.ca/tizhoosh/">H.R. Tizhoosh</a>. I
+					have also completed seven internships across six different companies
+					including <a
+					href="https://a9.com/what-we-do/product-search.html">Amazon
+					Search</a>, <a href="https://a9.com/what-we-do/advertising.html">Amazon Advertising</a> and
+					<a href="http://morpheuslabs.co.uk/">Morpheus Labs</a>.
+				</p>
+				<p align=center>
+					<a href="Shamak_CV.pdf">CV</a> &nbsp/&nbsp
+					<a href="https://scholar.google.com/citations?user=L-XbrqQAAAAJ&hl=en">Google Scholar</a> &nbsp/&nbsp
+					<a href="http://www.github.com/shamak"> GitHub </a>
+				</p>
+				</td>
+				<td width="33%">
+				<img src="Shamak_circle.jpg" style="height: 25%">
+				</td>
+			</tr>
+			</table>
+			<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
+			<tr>
+				<td width="100%" valign="middle">
+					<heading>Research</heading>
+					<p>
 
-<div class="home">
+					</p>
+				</td>
+			</tr>
+			</table>
 
- <!--  <h1 class="page-heading">About Me</h1> -->
+	<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
 
-<!--   <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+		<tr onmouseout="aperture_stop()" onmouseover="aperture_start()" >
+			<td width="25%">
+				<div class="one">
+				<div class="two" id = 'corr_img'><img src='corr_after.png' style="height: 75%"></div>
+				<img src='corr_before.png' style="height: 75%">
+				</div>
+				<script type="text/javascript">
+				function aperture_start() {
+				document.getElementById('corr_img').style.opacity = "1";
+				}
+				function aperture_stop() {
+				document.getElementById('corr_img').style.opacity = "0";
+				}
+				aperture_stop()
+				</script>
+			</td>
+			<td valign="top" width="75%">
+			<a href="https://arxiv.org/abs/1804.00815">
+						<papertitle>Convolutional Neural Networks Regularized
+						by Correlated Noise</papertitle>
+			</a><br>
+				<strong>Shamak Dutta</strong>, <a
+				href="https://uwaterloo.ca/systems-design-engineering/profile/bptripp">Bryan Tripp</a>,
+				<a href="http://www.uoguelph.ca/~gwtaylor/">Graham Taylor</a> <br>
+				<em>Conference on Computer and Robot Vision</em>, 2018 <br>
+				<a href="DuttaCorr2018.bib">bibtex</a>
+				<p></p>
+				<p>We show that adding spatially and tuning dependent correlated
+				noise to the activities of units in a neural network helps in
+			regularization and image classification under occlusion.</p>
+			</td>
+		</tr>
 
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
-      </li>
-    {% endfor %}
-  </ul> -->
+		<tr onmouseout="radon_stop()" onmouseover="radon_start()" >
+			<td width="25%">
+				<div class="one">
+				<div class="two" id = 'radon_img'><img src='radon_after.png' style="height: 75%"></div>
+				<img src='radon_before.png' style="height: 75%">
+				</div>
+				<script type="text/javascript">
+				function radon_start() {
+				document.getElementById('radon_img').style.opacity = "1";
+				}
+				function radon_stop() {
+				document.getElementById('radon_img').style.opacity = "0";
+				}
+				aperture_stop()
+				</script>
+			</td>
+			<td valign="top" width="75%">
+			<a href="https://arxiv.org/abs/1609.05112">
+						<papertitle>Barcodes for Medical Image Retrieval Using Autoencoded Radon Transform</papertitle>
+			</a><br>
+			<a
+				href="http://kimia.uwaterloo.ca/tizhoosh/">H.R. Tizhoosh</a>,
+				<a href="http://www.christhetree.com/">Christopher Mitcheltree</a>,
+				Shujin Zu,
+				<strong>Shamak Dutta</strong> <br>
+				<em>International Conference on Pattern Recognition</em>, 2016 <br>
+				<a href="Tizhoosh2016.bib">bibtex</a>
+				<p></p>
+				<p>We show that barcodes generated by thresholding the learned
+				representations of autoencoders on the Radon transform of images can
+			be used in medical image search and retrieval.</p>
+			</td>
+		</tr>
 
-  <article class="post-content">
+	</table>
 
-  <p>
-    I am currently a Master's student at the <a href="https://uwaterloo.ca/">University of Waterloo</a> working with <a href="http://www.uoguelph.ca/~gwtaylor/">Graham Taylor</a> and <a href="https://uwaterloo.ca/systems-design-engineering/people-profiles/bryan-tripp">Bryan Tripp</a>. I am part of the <a href="https://uwaterloo.ca/neurorobotics-lab/">NeuroRobotics Lab</a> and the <a href="http://www.uoguelph.ca/~gwtaylor/">Machine Learning Research Group</a>. My research aims to develop a better understanding of artificial and biological neural processes. 
-  </p>
-
-  <p>
-    I am generally interested in the interplay of computational neuroscience, machine learning and optimization. My current focus is on modeling certain statistical mechanisms that occur in the brain's visual stream.
-  </p>
-
-  <p>
-    Before coming to graduate school, I majored in Computer Engineering at the <a href="https://uwaterloo.ca/">University of Waterloo</a>. During my undergrad, I did research in machine learning with <a href="http://kimia.uwaterloo.ca/tizhoosh/">Hamid Tizhoosh</a> and <a href="https://ece.uwaterloo.ca/~dkulic/people-dana.html">Dana Kulić</a>, and in combinatorial optimization with <a href="https://ece.uwaterloo.ca/~sl2smith/">Stephen Smith</a>. I've worked with the <a href="https://a9.com/whatwedo/product-search/">Search</a> and <a href="https://a9.com/whatwedo/advertising/">Advertising</a> teams at <a href="https://www.a9.com/">A9</a> and more recently, at <a href="http://morpheuslabs.co.uk/">Morpheus Labs</a> where I was advised by <a href="http://whirl.cs.ox.ac.uk/member/shimon-whiteson/">Shimon Whiteson</a> and <a href="http://users.isr.ist.utl.pt/~jmessias/">João Messias</a>. Outside of research, I enjoy playing soccer, squash and cooking. I grew up in <a href="https://en.wikipedia.org/wiki/Muscat">Muscat</a>, <a href="https://en.wikipedia.org/wiki/Oman">Oman</a>.
-  </p>
-
-<!--   <p>
-    I completed my undergraduate degree at the University of Waterloo in Computer Engineering. During my time at Waterloo, I enjoyed solving problems in industry and academia. I've worked with the <a href="https://a9.com/whatwedo/product-search/">Search</a> and <a href="https://a9.com/whatwedo/advertising/">Advertising</a> teams at <a href="https://www.a9.com/">A9</a>, among other companies. I have also pursued research in machine learning for human motion forecasting with <a href="https://ece.uwaterloo.ca/~dkulic/people-dana.html">Dr. Dana Kulić</a>, machine learning for image search & retrieval with <a href="http://kimia.uwaterloo.ca/tizhoosh/">Dr. H.R. Tizhoosh</a> and combinatorial optimization with <a href="https://ece.uwaterloo.ca/~sl2smith/">Dr. Stephen Smith</a>.
-  </p>
-
-  <p>
-    I spent the summer of 2017 working as a research intern advised by <a href="http://whirl.cs.ox.ac.uk/member/shimon-whiteson/">Dr. Shimon Whiteson</a> and <a href="http://users.isr.ist.utl.pt/~jmessias/">Dr. João Messias</a> at <a href="http://morpheuslabs.co.uk/">Morpheus Labs</a> in Oxford, United Kingdom. At Morpheus Labs, I worked on 3D scene reconstruction from monocular 2D image sequences.
-  </p>
-
-  <p>
-    I am currently pursuing my Masters (MASc) in the <a href="https://uwaterloo.ca/neurorobotics-lab/">NeuroRobotics Lab</a> and the <a href="http://www.uoguelph.ca/~gwtaylor/">Machine Learning Research Group</a> where I am advised by <a href="https://uwaterloo.ca/systems-design-engineering/people-profiles/bryan-tripp">Dr. Bryan Tripp</a> and <a href="http://www.uoguelph.ca/~gwtaylor/">Dr. Graham Taylor</a>. 
-  </p> -->
-
-  </article>
-
-
-</div>
+	<table width="100%" align="center" border="0" cellspacing="0" cellpadding="20">
+	<tr>
+		<td>
+		<br>
+		<p align="right">
+			<font size="2">
+			<a href="https://jonbarron.info/">this guy makes an awesome
+			webpage</a>
+			 </font>
+		</p>
+		</td>
+	</tr>
+	</table>
+		</td>
+		</tr>
+	</table>
+	</body>
+</html>
