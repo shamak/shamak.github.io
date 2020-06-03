@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>shamak's blog</title>
+<meta name="description" content="shamak's blog" />
+<style type="text/css">
+.post-dates{display:inline;padding-right:10px}
+.post-desc{font-style:italic}
+.post-footer{font-style:italic}
+body{margin:40px auto;max-width:800px;line-height:1.6;font-size:18px;color:#444;padding:0 10px}
+h1,h2,h3{line-height:1.2}
+</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}, 
+	TeX: {equationNumbers: {autoNumber: "AMS"}}
+    });
+</script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async
+src="https://www.googletagmanager.com/gtag/js?id=UA-168377627-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+			  gtag('config', 'UA-168377627-1');
+</script>
+</head>
+<body>
+<h2>System Identification in Linear Dynamical Systems</h2>
+<div class="post-desc"> 
+	26 May 2020
+</div>
+<div class="post-content">
+
+$$
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+$$
+
+	<p>
+	I recently developed an interest in system identification for dynamical 
+	systems.  
+	The blog post will be a brief, and by no means exhaustive, introduction to
+	the
+	basics of some classical methods for system identification. For a thorough
+	treatment of the subject, I recommend reading <a
+		href="https://www.amazon.com/System-Identification-Theory-User-2nd/dp/0136566952">Ljung (1998)</a> 
+	and <a
+		href="https://www.amazon.com/Filtering-System-Identification-Squares-Approach/dp/0521875129">Verhaegen
+	(2007)</a>. You will find all the results below in these books.
+	</p>
+
+	<h3>
+	Prediction Error Methods 
+	</h3>
+
+	<p>
+	Let's start with parametric estimation. Given	a dataset $\left[u(1), y(1), \ldots,
+	u(N),
+	y(N)\right]$ and the predictor:
+	$$
+	\begin{align} \label{eq:system}
+		\hat{x}(t+1) = A \hat{x}(t) + B u(t)\\
+		\hat{y}(t) = C \hat{x}(t) + D u(t),
+	\end{align}
+	$$
+
+	we want to find matrices $A, B, C, D$ such that the $\hat{y}(t)$ is close to
+	$y(t)$ for $t = 1, \ldots, N$. Note that the initial state $\hat{x}(0)$ is
+	also a parameter to be estimated. 
+	</p>
+
+	<p>
+
+	There are different methods to parameterize this system but one simple way 
+	is to let each entry in the matrices $A, B, C, D$ be an entry in the
+	parameter vector $\theta$. If the dimension of $\hat{x}$, $\hat{y}$, and $u$ are $n$,
+	$l$, and $m$ respectively, the number of parameters is $ p = n^2 + n(m+l) + ml$
+	($+ n$ if adding the initial state vector). 
+
+	Since we want $\hat{y}(t)$ to be "close" to $y(t)$, we can use the following
+	quadratic cost function (any norm in $\mathbb{R}^n$ would work):
+
+	$$
+	\begin{align}
+	J_N(\theta) = \sum_{t=1}^N \lVert y(k) - \hat{y}(k, \theta) \rVert_{2}^{2}.
+	\label{eq:obj}
+	\end{align}
+	$$
+
+	We'd like to minimize Equation (\ref{eq:obj}) and thus the parameter estimate is defined
+	as:
+
+	$$
+	\begin{align}
+	\hat{\theta}_N = \argmin_{\theta \in \Omega} J_N(\theta), \label{eq:opt}
+	\end{align}
+	$$
+
+	where $\Omega \subset \mathbb{R}^p$ is a set that contains 
+	permissible parameter vectors. For example, we might want to constrain the
+	matrices such that the system is stable. $J_N(\theta)$ is not
+	convex (an exercise in computing the Hessian $\nabla^2 J_N(\theta)$ and 
+	finding $x$ such that $x^T\nabla^2 J_N(\theta) x < 0$) and solving for the global
+	minimum can be computationally
+	intensive. For a brief description on why non-convex optimization can be
+	difficult, take a look at Ben Recht's <a
+		href="http://www.argmin.net/2016/04/11/flatness/">blog post</a>.
+
+	Several gradient-based optimization methods have been employed to solve
+	(\ref{eq:opt}) such as Gauss-Newton. 
+	
+	Any method that solves problems of the form of (\ref{eq:opt}) falls under the 
+	umbrella of <i>prediction-error identification methods</i> (PEM).
+	</p>
+
+	<p>
+	A natural question arises: how good is the estimate $\hat{\theta}_N$ as 
+	we get more data? We consider the asymptotic regime as $N \rightarrow
+	\infty$. The basic result (under some non-restrictive assumptions about the
+	data, cost criterion, and system) is:
+
+	$$
+	\begin{align*}
+		\hat{\theta}_N \to \argmin_{\theta \in \Omega} \mathbb{E}\ l\left(y(k) -
+		\hat{y}(k, \theta)\right), \;\text{with probability 1 as}\ N \to \infty,
+	\end{align*}
+	$$
+	where $l$ is a suitable distance measure and the expectation is taken over
+	all possible random disturbances that affect the data. This is a strong
+	result that tells us the estimate converges to the <i>best possible
+	approximation</i> of the true system subject to the constraints in $\Omega$
+and our choice of parameterization.
+	For a more precise statement of the theorem and a proof, check out the paper
+	by <a href="https://ieeexplore.ieee.org/abstract/document/1101840">Ljung
+		(1978)</a>.
+	</p>
+
+	<h3>
+	Subspace Identification Methods
+	</h3>
+
+	<p>
+	The major issue with PEM is the non-convexity of the objective and the fact
+	that it is prone to
+	many local minima which makes the optimization difficult. In this section, we
+	describe a non-parametric method that recovers the matrices ($A, B, C, D$) from the
+	Markov parameters of the linear system. Since the focus of this post is on
+	brevity, we will only describe the algorithm for
+	<i>deterministic</i> linear systems to give a flavour of subspace
+	identification methods.
+	</p>
+
+	<p>
+	Consider a linear time-invariant state-space system:
+	$$
+	\begin{align} \label{eq:lti1}
+		x(t+1) = A x(t) + B u(t)\\
+		y(t) = C x(t) + D u(t),\label{eq:lti2}
+
+	\end{align}
+	$$
+
+	with $A \in \mathbb{R}^{n \times n}$, $B \in \mathbb{R}^{n \times m}$, $C \in
+	\mathbb{R}^{l \times n}$, and $D \in \mathbb{R}^{l \times m}$.
+	</p>
+
+	<p>
+	First, we need to define observability, reachability, Markov parameters,
+	similarity transformations, and the Hankel matrix.
+	</p>
+
+	<p><strong>Definition 1: </strong>The system in
+	(\ref{eq:lti1})-(\ref{eq:lti2}) is <i>reachable</i> if for any two states
+	$x_a$ and $x_b$, there exists an input signal $u(k)$ for $k_a \leq k \leq k_b$
+	that will transfer the system from state $x(k_a) = x_a$ to $x(k_b) = x_b$.</p>
+
+	<p>Informally, reachability tells us if the input can steer the system
+	from any state to another in a finite time interval. Reachability of this
+	system can be determined if the rank of the matrix $\mathcal{C}_n$ is $n$
+	where
+
+	$$
+	\begin{equation}\mathcal{C}_{n}=\left[\begin{array}{llll}
+	B & A B & \cdots & A^{n-1} B
+	\end{array}\right].\end{equation}
+	$$
+	</p>
+
+	<p><strong>Definition 2: </strong>The system in
+	(\ref{eq:lti1})-(\ref{eq:lti2}) is <i>observable</i> if any initial state
+	$x(k_a)$ can be uniquely determined by the corresponding zero-input response
+	$y(k)$ for $k_a \leq k \leq k_b$ with $k_b$ finite.</p>
+
+	<p>Roughly, observability tells us if we can estimate the states $x(t)$
+	by observing the outputs $y(t)$. The system is observable if the matrix
+	$\mathcal{O}_n$ is of rank $n$ where
+
+	$$
+	\begin{equation}\mathcal{O}_{n}=\left[\begin{array}{c}
+	C \\
+	C A \\
+	\vdots \\
+	C A^{n-1}
+	\end{array}\right].\end{equation}
+	$$
+	
+	</p>
+
+	<p><strong>Definition 3: </strong>The <i>Markov parameters</i> of system
+	(\ref{eq:lti1})-(\ref{eq:lti2}) are defined as: 
+
+	\begin{equation}\mathbf{h}(t)=\left\{\begin{array}{ll} \label{eq:markov}
+	D, & t=0 \\
+	C A^{t-1} B, & t>0
+	\end{array}\right.\end{equation}
+	</p>
+
+	<p>This is essentially the impulse
+	response of the system with the initial state assumed to be zero. The impulse
+	response is the output of the system when $u(0) = 1$ and $0$ otherwise.
+	</p>
+
+	<p>An important aspect of this problem is that there are different state
+	representations $x(t)$ that can give the same input-output behaviour between $u(t)$
+	and $y(t)$. To see this, consider transforming the state in the system 
+	(\ref{eq:lti1})-(\ref{eq:lti2}) as follows:
+	
+	$$
+		x_T(t) = T^{-1} x(t),
+	$$
+
+	where $T$ is an arbitrary invertible matrix called a <i>similarity
+		transformation</i>. The system corresponding to this new state (with the
+	same input-output behaviour) is:
+
+	$$
+	\begin{align} \label{eq:lti3}
+		x_T(t+1) = A_T x_T(t) + B_T u(t)\\
+		y(t) = C_T x_T(t) + D_T u(t),\label{eq:lti4}
+	\end{align}
+	$$
+
+	where
+
+	$$
+	\begin{equation*}\begin{array}{ll}
+	A_{T}=T^{-1} A T, & B_{T}=T^{-1} B \\
+	C_{T}=C T, & D_{T}=D.
+	\end{array}\end{equation*}
+	$$
+
+	Thus, we can only hope to recover the system matrices upto a similarity
+	transformation $T$.
+	</p>
+
+	<p>
+	The last definition we require is the Hankel matrix $\mathcal{H}_{n+1,n+1}$.
+	It is constructed from the Markov parameters as follows:
+	$$
+	\begin{equation}\mathcal{H}_{n+1, n+1}=\left[\begin{array}{cccc}
+	h(1) & h(2) & \dots & h(n+1) \\
+	h(2) & h(3) & \dots & h(n+2) \\
+	\vdots & \vdots & \ddots & \vdots \\
+	h(n+1) & h(n+2) & \dots & h(2 n+1)
+	\end{array}\right]\end{equation}
+	$$
+	</p>
+
+	<p>
+	Provided the system (\ref{eq:lti1})-(\ref{eq:lti2}) is observable and
+	reachable, it has two properties:
+	<ul>
+		<li>rank$(\mathcal{H}_{n+1,n+1}) = n$  </li>
+		<li>$\mathcal{H}_{n+1,n+1} = \mathcal{O}_{n+1} \mathcal{C}_{n+1}$ </li>
+	</ul>
+	</p>
+
+	Plugging in the definition of the Markov parameters (\ref{eq:markov}) into
+	the definition of the Hankel matrix will show it is the product of the
+	required matrices. The first statement is proved using the fact that the 
+	rank of the reachability and observability matrices are $n$ and then 
+	using Sylvester's rank inequality.
+	
+	<p>
+	We are now ready to state the problem. Given a dataset $\left[u(1), y(1), \ldots,
+	u(N),
+	y(N)\right]$ generated by the reachable and observable system 
+	(\ref{eq:lti1})-(\ref{eq:lti2}), we want to find the system matrices 
+	$A, B, C, D$ upto a similarity transformation.
+	</p>
+
+	<p>
+
+	There are 2 steps to recovering the system matrices:
+	<ol>
+		<li> Estimate the Markov parameters from the dataset.</li>
+		<li> Given the Markov parameters, estimate the system matrices. </li>
+	</ol>
+
+	There exist multiple methods to estimate the Markov parameters from 
+	input-output data and in this post we will focus on the second step of the 
+	algorithm, assuming we already have an estimate of the Markov parameters. 
+	This step is based on the work of Ho and Kalman (1966). 
+	</p>
+
+	<p>
+	<ol>
+		<li>First, we recover $D_T$ instantly as $h(0) = D = D_T$.</li>
+		<li>We construct the Hankel matrix as defined above using the Markov
+		parameters and compute it's singular value decomposition: 
+
+		$$
+		\begin{equation}\mathcal{H}_{n+1, n+1}=\left[\begin{array}{ll}
+		U_{n} & \bar{U}_{n}
+		\end{array}\right]\left[\begin{array}{cc}
+		\Sigma_{n} & 0 \\
+		0 & 0
+		\end{array}\right]\left[\begin{array}{c}
+		V_{n}^{\mathrm{T}} \\
+		\bar{V}_{n}^{\mathrm{T}}
+		\end{array}\right]=U_{n} \Sigma_{n} V_{n}^{\mathrm{T}},\end{equation}
+		$$
+
+		where $\Sigma_{n} \in \mathbb{R}^{n \times n}$ and is full rank, thus
+		invertible.
+
+		The decomposition of this form exists because rank$(\mathcal{H}_{n+1,n+1})$
+		is $n$ and $n < (n+1)l$ and $n < (n+1)m$ which are the number of rows and
+		columns of the Hankel matrix.
+		</li>
+
+		<li> Since $\mathcal{H}_{n+1,n+1} = \mathcal{O}_{n+1} 
+		\mathcal{C}_{n+1}$,
+		$$
+		\begin{equation}U_{n}=\mathcal{O}_{n+1} T=\left[\begin{array}{c}
+		C T \\
+		C T T^{-1} A T \\
+		\vdots \\
+		C T\left(T^{-1} A T\right)^{n}
+		\end{array}\right]=\left[\begin{array}{c}
+		C_{T} \\
+		C_{T} A_{T} \\
+		\vdots \\
+		C_{T} A_{T}^{n}
+		\end{array}\right],\end{equation}
+		$$
+
+		where $T = \mathcal{C}_{n+1} V_n \Sigma_n^{-1}$. 		</li>
+		
+		<li>We can now recover $C_T$ from the first $l$ rows of $U_n$.  </li>
+
+		<li>We can recover $A_T$ by solving the equation: $U_n\left[1: (n-1)l, :\right] A_T =
+		U_n\left[l+1:nl,:\right]$</li>
+
+		<li>Finally, we can recover $B_T$ by the first $m$ columns of $\Sigma_n
+		V_n^T$. To see this, 
+
+		$$
+			\begin{equation}\begin{aligned}
+			U_n \Sigma_n V_n^T &= \mathcal{O}_{n+1} \mathcal{C}_{n+1} \\
+			\Sigma_{n} V_{n}^{T} &=T^{-1} \mathcal{C}_{n+1} \\
+			&=\left[T^{-1} B \quad T^{-1} A T T^{-1} B \quad \cdots \quad\left(T^{-1}
+			A T\right)^{n} T^{-1} B\right] \\
+			&=\left[\begin{array}{cccc}
+			B_{T} & A_{T} B_{T} & \cdots & A_{T}^{n} B_{T}
+			\end{array}\right]
+			\end{aligned}\end{equation}
+		$$
+		
+		</li>
+	</ol>
+	</p>
+
+
+</div>
+<div class="post-footer">
+	<a href="/blog/">Home</a>
+</div>
+
+</body>
+</html>
