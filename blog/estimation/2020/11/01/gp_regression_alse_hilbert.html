@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>shamak's blog</title>
+<meta name="description" content="shamak's blog" />
+<style type="text/css">
+.post-dates{display:inline;padding-right:10px}
+.post-desc{font-style:italic}
+.post-footer{font-style:italic}
+body{margin:40px auto;max-width:800px;line-height:1.6;font-size:18px;color:#444;padding:0 10px}
+h1,h2,h3{line-height:1.2}
+</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}, 
+	TeX: {equationNumbers: {autoNumber: "AMS"}}
+    });
+</script>
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async
+src="https://www.googletagmanager.com/gtag/js?id=UA-168377627-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+			  gtag('config', 'UA-168377627-1');
+</script>
+</head>
+<body>
+<h2>Connecting Gaussian process regression to linear
+	least squares estimation in a particular Hilbert space</h2>
+<div class="post-desc"> 
+	01 November 2020
+</div>
+<div class="post-content">
+$$
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+$$
+
+<p>
+While learning about estimation in the space of $L^2$ square integrable functions, I noticed the estimators
+looked similar to predictions in a Gaussian Process. It motivated me to find out the connection, if there was one. The
+upshot is that predictions in a Gaussian Process can be viewed as a special case of linear least-squares estimation in
+the Hilbert space of square-integrable random variables. The GP predictions are also <i>optimal</i> from the perspective
+of mean-squared error. I'll attempt to explain this relationship.
+
+
+</p>
+
+<p>
+Let's begin with Gaussian Processes (GPs). A GP is an infinite collection of random variables $\left\{Y(x): x \in \chi \right\}$, where any finite collection of the
+variables is jointly normally distributed. $\chi$ is the index set of the process. Each random variable in the GP is
+uniquely associated with an element in the index set. We will assume the mean of any random variable in this GP is zero.
+Then, the behaviour of the process is fully specified by its covariance function. The covariance between any two points
+$x_1, x_2 \in \chi$ is given by the covariance function: $C(x_1,x_2) = \text{cov}\left(Y(x_1),Y(x_2)\right)$.
+</p>
+
+<p>
+In the regression setting, we assume the data is drawn from a GP with a known covariance function. Suppose we are given a dataset $\{(x_1,f(x_1)),
+\ldots, (x_n, f(x_n))\}$, where $x_i \in \mathbb{R}^d, f(x_i) \in \mathbb{R}$ for any $i$. The goal is to predict the function value $f(x_*)$ at an unknown point $x_*$. The assumption
+implies the index set is $\mathbb{R}^d$, there is a Gaussian random variable $Y(x_i)$ at each $x_i$, and the variables 
+are correlated through the covariance
+function. The given data are observed values of the Gaussian random variables $Y(x_i) = f(x_i),\ i = \{1, 
+\ldots, n\}$. 
+</p>
+
+
+<p>
+Now, there is a Gaussian random variable $Y_*$ at $x_*$ as well. We are interested in the distribution of
+$Y_*|Y_1, \ldots, Y_n$ i.e. the conditional distribution of the Gaussian random variable at the unknown point $x_*$
+given the data. Using this <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Conditional_distributions">
+	neat property</a> about multivariate Gaussian distributions, it turns out the conditional distribution is also
+Gaussian! Consider the joint Gaussian distribution of $\left(Y(x_1), \ldots, Y(x_n), Y_*\right)$ with mean $\mathbf{0} \in
+\mathbb{R}^{n+1}$ and covariance $K \in \mathbb{R}^{n+1 \times n+1}$. Note that the entries of $K$ are given by the
+covariance function. Let $K$ be partitioned into $K_+ \in \mathbb{R}^{n \times n}$, $\mathbf{k} \in \mathbb{R}^n$, and $k_* \in \mathbb{R}$
+
+$$
+K = 
+\begin{pmatrix}
+K_+ & \mathbf{k}\\
+\mathbf{k}^T & k_* 
+\end{pmatrix}.
+$$
+
+Given that we observe $Y_1 = f(x_1), \ldots, Y_n = f(x_n)$ and letting $\mathbf{y} = \left[f(x_1), \ldots, f(x_n)\right]^T \in
+\mathbb{R}^n$, the mean and variance of the conditional distribution
+is
+
+$$
+
+\begin{align}
+
+Y_*|Y_1, \ldots, Y_n \sim \mathcal{N}\left(\mathbf{k}^T K_{+}^{-1} \mathbf{y}, k_* - \mathbf{k}^T K_+^{-1}
+\mathbf{k}\right).
+
+\end{align}
+$$
+
+Our prediction of the value $f(x_*)$ would be the mean of this distribution i.e. $f(x_*) = \mathbf{k}^T K_+^{-1}
+\mathbf{y}$.
+</p>
+
+<p>
+Now we will establish the relationship to linear least-squares estimation in Hilbert spaces. First, we need to state the  
+<a href="https://en.wikipedia.org/wiki/Hilbert_projection_theorem">projection theorem</a>.
+</p>
+
+<p>
+<b> Theorem </b>: Let $\mathcal{H}$ be a Hilbert space and $\mathcal{M}$ be a closed linear subspace of $\mathcal{H}$. Then, each
+$x \in H$ has the unique decomposition
+
+$$
+	x = y + z,
+$$
+where $y \in \mathcal{M}$ and $\langle z,v \rangle = 0$, $\forall v \in \mathcal{M}$. Moreover,
+$$
+\lVert x-y \rVert = \underset{v \in \mathcal{M}}{\text{min}}\ \lVert x - v \rVert.
+$$
+</p>
+
+Consider a probability space $\left(\Omega, \mathcal{A}, \mathbb{P}\right)$. Using the <a
+	href="https://en.wikipedia.org/wiki/Riesz–Fischer_theorem">Riesz-Fischer
+	theorem</a>, the space of square-integrable random variables $L^2(\Omega, \mathcal{A}, \mathbb{P}) = \left\{X: X\ \text{is a random variable on}\ (\Omega, \mathcal{A}, \mathbb{P})\ \text{and}\ \mathbb{E}(X^2) < \infty\right\}$ is a Hilbert space.
+
+
+
+
+
+
+ 
+
+</div>
+
+<div class="post-footer">
+	<a href="/blog/">Home</a>
+</div>
+
+</body>
+</html>
