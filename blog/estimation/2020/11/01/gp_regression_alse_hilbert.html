@@ -45,11 +45,11 @@ $$
 $$
 
 <p>
-While learning about estimation in the space of $L^2$ square integrable functions, I noticed the estimators
-looked similar to predictions in a Gaussian Process. It motivated me to find out the connection, if there was one. The
-upshot is that predictions in a Gaussian Process can be viewed as a special case of linear least-squares estimation in
-the Hilbert space of square-integrable random variables. The GP predictions are also <i>optimal</i> from the perspective
-of mean-squared error. I'll attempt to explain this relationship.
+While learning about estimation in the space of square-integrable functions, I noticed the estimators
+looked similar to predictions in Gaussian Process regression. It motivated me to find out the connection if there was one. The
+upshot is that one can view predictions in a Gaussian Process as a particular case of linear least-squares estimation in
+the Hilbert space of square-integrable random variables. I will gloss over some technical details in an attempt to
+make this post concise.
 
 
 </p>
@@ -96,6 +96,7 @@ is
 $$
 
 \begin{align}
+\label{eq:gp_pred}
 
 Y_*|Y_1, \ldots, Y_n \sim \mathcal{N}\left(\mathbf{k}^T K_{+}^{-1} \mathbf{y}, k_* - \mathbf{k}^T K_+^{-1}
 \mathbf{k}\right).
@@ -103,6 +104,9 @@ Y_*|Y_1, \ldots, Y_n \sim \mathcal{N}\left(\mathbf{k}^T K_{+}^{-1} \mathbf{y}, k
 \end{align}
 $$
 
+If you're interested in computing this distribution using the joint density,
+take a look <a
+	href="http://fourier.eng.hmc.edu/e161/lectures/gaussianprocess/node7.html">here</a>.
 Our prediction of the value $f(x_*)$ would be the mean of this distribution i.e. $f(x_*) = \mathbf{k}^T K_+^{-1}
 \mathbf{y}$.
 </p>
@@ -123,11 +127,146 @@ where $y \in \mathcal{M}$ and $\langle z,v \rangle = 0$, $\forall v \in \mathcal
 $$
 \lVert x-y \rVert = \underset{v \in \mathcal{M}}{\text{min}}\ \lVert x - v \rVert.
 $$
+Note: $y$ is known as the projection of $x$ onto $\mathcal{M}$.
 </p>
 
-Consider a probability space $\left(\Omega, \mathcal{A}, \mathbb{P}\right)$. Using the <a
+ 
+
+Consider a probability space $\left(\Omega, \mathcal{A}, \mathbb{P}\right)$. The <a
 	href="https://en.wikipedia.org/wiki/Riesz–Fischer_theorem">Riesz-Fischer
-	theorem</a>, the space of square-integrable random variables $L^2(\Omega, \mathcal{A}, \mathbb{P}) = \left\{X: X\ \text{is a random variable on}\ (\Omega, \mathcal{A}, \mathbb{P})\ \text{and}\ \mathbb{E}(X^2) < \infty\right\}$ is a Hilbert space.
+	theorem</a> ensures the space of square-integrable random variables,
+$L_2(\Omega, \mathcal{A}, \mathbb{P}) = \left\{X: X\ \text{is a random variable
+on}\ (\Omega, \mathcal{A}, \mathbb{P})\ \text{and}\ \mathbb{E}(X^2) <
+\infty\right\}$, is a Hilbert space (this set should contain equivalence
+classes of random variables but I will skip that detail). 
+</p>
+
+<p>
+We define an inner product on this space, $\langle X,Y \rangle = 
+\mathbb{E}[XY]$ for any $X, Y \in L_2(\Omega, \mathcal{A}, \mathbb{P})$. I will leave it to the reader to verify that $\mathbb{E}[XY]$ 
+satisfies the properties of an inner product. Now, we can define the <i>linear
+	least-squares estimator</i>. Recall that the norm associated with the 
+space is $\lVert x \rVert =
+\sqrt{\langle x,x \rangle}$.
+</p>
+
+<p>
+<b>Definition</b>: Let $X, Y_1, \ldots, Y_n \in L_2(\Omega, \mathcal{A},
+\mathbb{P})$ with $\mathbb{E}[X] = \mathbb{E}[Y_1] = \ldots = \mathbb{E}[Y_n] =
+0$. The <i>linear least-squares estimator</i> $\hat{X}$ of $X$ given $Y_1, \ldots, Y_n$,
+is the projection of $X$ onto $L(Y_1, \ldots, Y_n) = \text{span}(Y_1, \ldots,
+Y_n)$.
+</p>
+
+<p>
+Since $L(Y_1, \ldots, Y_n)$ is a closed linear subspace of $L_2(\Omega,
+\mathcal{A}, \mathbb{P})$, the projection theorem guarantees that
+$$
+\mathbb{E}\left[(X - \hat{X})^2 \right] = \underset{V \in L(Y_1, \ldots,
+Y_n)}{\text{min}}\ \mathbb{E}\left[(X - V)^2 \right].
+$$
+</p>
+
+<p>
+This characterizes the expected mean-squared error of estimating
+$X$ using $Y_1, \ldots, Y_n$. The linear least-squares estimator is 
+<i>optimal</i> in the class of linear predictors and this is guaranteed by the
+projection theorem.
+</p>
+
+<p>
+<b>Proposition</b>: Let $X, Y_1, \ldots, Y_n \in L_2(\Omega, \mathcal{A},
+\mathbb{P})$ with $\mathbb{E}[X] = \mathbb{E}[Y_1] = \ldots = \mathbb{E}[Y_n] =
+0$. The <i>linear least-squares estimator</i> $\hat{X}$ of $X$ given $Y_1,
+\ldots, Y_n$ is given by:
+
+$$\begin{align}
+\label{eq:llse}
+\hat{X} = \mathbb{E}\left[X\mathbf{y}\right]^T
+\mathbb{E}\left[\mathbf{y}\mathbf{y}^T\right]^{-1}
+\mathbf{y},
+\end{align}
+$$
+where 
+$$
+
+\text { where } \mathbf{y} {=} \left[\begin{array}{c}
+Y_{1} \\
+Y_{2} \\
+\vdots \\
+Y_{n}
+\end{array}\right] \quad \text { and }\ \mathbb{E}(X \mathbf{y})
+=\left[\begin{array}{c}
+\mathbb{E}\left(X Y_{1}\right) \\
+\mathbb{E}\left(X Y_{2}\right) \\
+\mathbb{E}\left(X Y_{n}\right)
+\end{array}\right].
+$$
+</p>
+
+<p>
+
+<b>Proof</b>: Since $\hat{X} \in L(Y_1, \ldots, Y_n)$, 
+
+$$
+\begin{align} \label{eq:lincomb}
+	\hat{X} = \alpha_1 Y_1 + \ldots + \alpha_n Y_n,
+	\end{align}
+$$
+for some $\alpha_1, \ldots, \alpha_n \in \mathbb{R}$.
+
+By the projection theorem, $X - \hat{X}$ is orthogonal to every element in
+$L(Y_1, \ldots, Y_n)$
+
+$$
+\mathbb{E}[(X-\hat{X})Y_j] = 0 \implies \mathbb{E}[XY_j] =
+\mathbb{E}[\hat{X}Y_j] = \sum_{i=1}^n \alpha_i \mathbb{E}[Y_iY_j],
+$$
+for $j = 1, \ldots, n$. The last equality uses the definition of $\hat{X}$.
+
+In matrix form,
+
+$$
+\left[\begin{array}{c}
+\mathbb{E}\left(X Y_{1}\right) \\
+\mathbb{E}\left(X Y_{2}\right) \\
+\vdots \\
+\mathbb{E}\left(X Y_{n}\right)
+\end{array}\right]
+
+=
+
+\left[\begin{array}{c}
+\mathbb{E}\left(Y_{1} Y_1\right) \ldots \mathbb{E}\left(Y_{1} Y_n\right) \\
+\vdots \\
+\mathbb{E}\left(Y_{n} Y_1\right) \ldots \mathbb{E}\left(Y_{n} Y_n\right)  
+\end{array}\right]
+
+\left[\begin{array}{c}
+\alpha_1\\
+\vdots \\
+\alpha_n
+\end{array}\right]
+
+$$
+
+Solving for $\alpha$ and plugging it into Equation (\ref{eq:lincomb}) gives us the required result.
+
+</p>
+
+<p>
+You may have noticed that Equations (\ref{eq:gp_pred}) and (\ref{eq:llse}) are
+similar! The GP prediction is a special case of the LLSE: when the random
+variables $X, Y_1, \ldots, Y_n$ are jointly normally distributed. This also
+shows the predictions from a GP are optimal in the class of linear predictors.
+
+It turns out that the GP predictions are also minimum mean-squared error
+predictors, not only restricted to the class of linear predictors. Maybe I will
+cover that in another blog post.
+</p>
+
+
+
 
 
 
